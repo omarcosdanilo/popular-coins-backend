@@ -19,7 +19,7 @@ def get_coins():
     return data
 
 
-@app.route('/coins/<string:id>/<int:value>/update', methods=['PUT'])
+@app.route("/coins/<string:id>/<int:value>/update", methods=["PUT"])
 def update_coin_score(id, value):
     sql = """
         UPDATE coins
@@ -28,13 +28,28 @@ def update_coin_score(id, value):
         WHERE id = ?;
 """
     try:
-        data = cursor.execute(sql, (value, id)).fetchone()
+        cursor.execute(sql, (value, id)).fetchone()
         connection.commit()
-        return 'Updated Succesfully'
+        return "Updated Succesfully"
     except sqlite3.Error as error:
         return str(error)
 
-    return data
+
+@app.route("/coins/order", methods=["GET"])
+def get_ordered_by_score():
+    sql = """
+        SELECT
+            *,
+            (total_score / number_of_reviews) AS score
+        FROM coins
+        ORDER BY score DESC
+    """
+
+    try:
+        data = cursor.execute(sql).fetchall()
+        return data
+    except sqlite3.Error as error:
+        print(error)
 
 
 app.run(debug=True)
