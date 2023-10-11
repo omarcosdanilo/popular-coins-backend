@@ -19,7 +19,7 @@ class DBConnection:
                 symbol TEXT,
                 icon TEXT,
                 price TEXT,
-                total_score INTEGER,
+                total_score REAL,
                 number_of_reviews INTEGER
                 );
                 """
